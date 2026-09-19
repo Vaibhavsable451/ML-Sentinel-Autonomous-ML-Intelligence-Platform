@@ -1,0 +1,5 @@
+# Dev/test only — not installed on Azure App Service
+pytest>=8.0
+ruff>=0.4
+pip-audit>=2.7
+boto3>=1.34
