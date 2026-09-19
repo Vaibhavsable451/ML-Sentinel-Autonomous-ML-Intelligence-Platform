@@ -10,8 +10,11 @@ export PYTHONPATH=/home/site/wwwroot
 
 cd /home/site/wwwroot
 
-# Install dependencies if needed
-pip install -r requirements.txt
+# Quick check if streamlit is installed before running pip
+if ! python -c "import streamlit" &>/dev/null; then
+    echo "Installing requirements..."
+    pip install --no-cache-dir -r requirements.txt
+fi
 
 # Run dataset generator & pipeline if artifacts do not exist
 if [ ! -f "artifacts/champion_model.joblib" ]; then
@@ -24,7 +27,8 @@ fi
 echo "Starting FastAPI backend service on port 8000..."
 PYTHONPATH=. uvicorn api.main:app --host 0.0.0.0 --port 8000 &
 
-# Start Streamlit dashboard on port 8080 (default Azure Web App PORT) or 8501
-PORT="${PORT:-8080}"
+# Start Streamlit dashboard on port 8080 or WEBSITES_PORT / PORT
+PORT="${PORT:-${WEBSITES_PORT:-8080}}"
 echo "Starting Streamlit dashboard on port ${PORT}..."
 exec PYTHONPATH=. streamlit run app/streamlit_app.py --server.port "${PORT}" --server.address 0.0.0.0 --server.headless true
+
