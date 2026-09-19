@@ -6,6 +6,14 @@ on:
       key_name:
         description: "AWS EC2 Key Pair Name"
         required: true
+      aws_access_key_id:
+        description: "AWS Access Key ID (Optional if set in GitHub Repository Secrets)"
+        required: false
+        default: ""
+      aws_secret_access_key:
+        description: "AWS Secret Access Key (Optional if set in GitHub Repository Secrets)"
+        required: false
+        default: ""
       region:
         description: "AWS Region"
         default: "us-east-1"
@@ -16,7 +24,6 @@ on:
 jobs:
   deploy-to-ec2:
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -28,8 +35,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID || inputs.aws_access_key_id }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY || inputs.aws_secret_access_key }}
           aws-region: ${{ inputs.region }}
 
       - name: Install dependencies
@@ -43,3 +50,4 @@ jobs:
             --key-name ${{ inputs.key_name }} \
             --region ${{ inputs.region }} \
             --instance-type ${{ inputs.instance_type }}
+
