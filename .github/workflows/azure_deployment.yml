@@ -4,16 +4,21 @@ on:
   workflow_dispatch:
     inputs:
       app_name:
-        description: "Azure Web App Name"
+        description: "Azure Web App Name (Globally Unique)"
         required: true
+        default: "ml-sentinel-app"
       resource_group:
         description: "Azure Resource Group Name"
+        required: true
         default: "ml-sentinel-rg"
+      location:
+        description: "Azure Region"
+        required: true
+        default: "eastus"
 
 jobs:
   deploy-to-azure:
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -27,9 +32,10 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ inputs.app_name }}
-          package: .
-          startup-command: 'bash azure/startup.sh'
+      - name: Provision & Deploy to Azure Web App
+        run: |
+          python3 azure/deploy_azure.py \
+            --resource-group ${{ inputs.resource_group }} \
+            --app-name ${{ inputs.app_name }} \
+            --location ${{ inputs.location }}
+
