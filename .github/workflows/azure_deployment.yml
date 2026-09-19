@@ -4,17 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       app_name:
-        description: "Azure Web App Name (Globally Unique)"
+        description: "Azure Web App Name"
         required: true
-        default: "ml-sentinel-app"
+        default: "MLSentinel"
       resource_group:
         description: "Azure Resource Group Name"
         required: true
-        default: "ml-sentinel-rg"
+        default: "azureai"
       location:
         description: "Azure Region"
         required: true
-        default: "eastus"
+        default: "westus3"
 
 jobs:
   deploy-to-azure:
@@ -27,15 +27,26 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Log in to Azure
+      - name: Deploy with Publish Profile
+        if: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE != '' }}
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ inputs.app_name }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          startup-command: 'bash azure/startup.sh'
+
+      - name: Log in to Azure & Deploy via CLI
+        if: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE == '' }}
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Provision & Deploy to Azure Web App
+      - name: Provision & Deploy via Python script
+        if: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE == '' }}
         run: |
           python3 azure/deploy_azure.py \
             --resource-group ${{ inputs.resource_group }} \
             --app-name ${{ inputs.app_name }} \
             --location ${{ inputs.location }}
+
 
