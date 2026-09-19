@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install ruff pytest pip-audit
+
+      - name: Lint (ruff)
+        run: ruff check ml/ api/ app/ ec2/ azure/ scripts/ tests/
+
+      - name: Generate synthetic dataset
+        run: PYTHONPATH=. python3 data/generate_data.py
+
+      - name: Run unit tests
+        run: PYTHONPATH=. pytest tests/ -v
+
+      - name: Dependency vulnerability scan
+        run: pip-audit -r requirements.txt || true  # non-blocking; review findings manually
+
+      - name: Security scan for secrets
+        uses: gitleaks/gitleaks-action@v2
+        continue-on-error: true

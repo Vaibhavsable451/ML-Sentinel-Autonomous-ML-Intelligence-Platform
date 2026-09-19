@@ -1,0 +1,17 @@
+{
+  "Name": "MLSentinelAzureDeploymentRole",
+  "IsCustom": true,
+  "Description": "Role for deploying ML Sentinel to Azure App Service",
+  "Actions": [
+    "Microsoft.Resources/subscriptions/resourceGroups/read",
+    "Microsoft.Resources/subscriptions/resourceGroups/write",
+    "Microsoft.Web/serverfarms/read",
+    "Microsoft.Web/serverfarms/write",
+    "Microsoft.Web/sites/read",
+    "Microsoft.Web/sites/write",
+    "Microsoft.Web/sites/publish/Action"
+  ],
+  "AssignableScopes": [
+    "/subscriptions/YOUR_AZURE_SUBSCRIPTION_ID"
+  ]
+}

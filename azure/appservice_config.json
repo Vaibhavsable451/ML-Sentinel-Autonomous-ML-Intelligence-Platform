@@ -1,0 +1,24 @@
+{
+  "name": "ml-sentinel-azure-config",
+  "properties": {
+    "siteConfig": {
+      "pythonVersion": "3.11",
+      "linuxFxVersion": "PYTHON|3.11",
+      "appCommandLine": "bash azure/startup.sh",
+      "appSettings": [
+        {
+          "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+          "value": "true"
+        },
+        {
+          "name": "PYTHONPATH",
+          "value": "/home/site/wwwroot"
+        },
+        {
+          "name": "WEBSITES_PORT",
+          "value": "8080"
+        }
+      ]
+    }
+  }
+}

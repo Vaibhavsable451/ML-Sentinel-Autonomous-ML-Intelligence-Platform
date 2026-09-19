@@ -1,0 +1,35 @@
+name: Microsoft Azure App Service Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_name:
+        description: "Azure Web App Name"
+        required: true
+      resource_group:
+        description: "Azure Resource Group Name"
+        default: "ml-sentinel-rg"
+
+jobs:
+  deploy-to-azure:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ inputs.app_name }}
+          package: .
+          startup-command: 'bash azure/startup.sh'

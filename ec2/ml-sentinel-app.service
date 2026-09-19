@@ -1,0 +1,14 @@
+[Unit]
+Description=ML Sentinel Streamlit Dashboard
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/opt/ml-sentinel
+ExecStart=/opt/ml-sentinel/venv/bin/streamlit run app/streamlit_app.py --server.port 8501 --server.address 0.0.0.0 --server.headless true
+Restart=always
+RestartSec=5
+Environment=PYTHONPATH=/opt/ml-sentinel
+
+[Install]
+WantedBy=multi-user.target

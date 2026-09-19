@@ -1,0 +1,41 @@
+name: Training Pipeline
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 3 * * 1"  # weekly, Monday 03:00 UTC — routine retraining check
+
+jobs:
+  train-and-evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate / refresh synthetic dataset
+        run: PYTHONPATH=. python3 data/generate_data.py
+
+      - name: Run full training + benchmark + registry pipeline
+        run: PYTHONPATH=. python3 scripts/train_and_register.py
+
+      - name: Check autonomous retraining decision against production traffic
+        run: PYTHONPATH=. python3 -m ml.models.retraining
+
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ml-sentinel-artifacts
+          path: |
+            artifacts/
+            model_registry/
+          retention-days: 30
