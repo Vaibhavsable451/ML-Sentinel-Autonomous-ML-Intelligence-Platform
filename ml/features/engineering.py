@@ -1,8 +1,9 @@
 """Feature engineering: derived features + statistical feature selection."""
 from __future__ import annotations
+
 import numpy as np
 import pandas as pd
-from sklearn.feature_selection import mutual_info_classif, RFE
+from sklearn.feature_selection import RFE, mutual_info_classif
 from sklearn.linear_model import LogisticRegression
 
 

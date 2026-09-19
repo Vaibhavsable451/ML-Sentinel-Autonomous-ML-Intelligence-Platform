@@ -1,15 +1,16 @@
 import sys
+
 sys.path.insert(0, ".")
 import numpy as np
 import pandas as pd
 import pytest
 
+from ml.drift.drift_detection import full_drift_report, population_stability_index
+from ml.features.engineering import add_engineered_features
 from ml.preprocessing.data_quality import profile
 from ml.preprocessing.pipeline import run_pipeline
-from ml.features.engineering import add_engineered_features
-from ml.drift.drift_detection import population_stability_index, full_drift_report
 from ml.risk.risk_engine import build_risk_report, score_performance
-from ml.risk.security import validate_input_schema, SchemaValidationError, mask_value
+from ml.risk.security import SchemaValidationError, mask_value, validate_input_schema
 
 
 @pytest.fixture(scope="module")

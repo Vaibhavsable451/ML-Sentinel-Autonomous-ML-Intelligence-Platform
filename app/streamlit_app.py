@@ -3,24 +3,30 @@
 Run with:  PYTHONPATH=. streamlit run app/streamlit_app.py
 Requires artifacts/ (run scripts/train_and_register.py first).
 """
-import sys
 import json
+import sys
+
 sys.path.insert(0, ".")
+import importlib
 from pathlib import Path
 
 import joblib
-import pandas as pd
 import numpy as np
-import streamlit as st
+import pandas as pd
 import plotly.express as px
+import streamlit as st
 
-import importlib
 import ml.explainability.explain as exp_module
+
 importlib.reload(exp_module)
 
+from ml.explainability.explain import (
+    explain_instance,
+    find_counterfactual,
+    global_shap_importance,
+)
 from ml.features.engineering import add_engineered_features
-from ml.explainability.explain import explain_instance, find_counterfactual, global_shap_importance
-from ml.risk.security import scan_dataframe_for_pii, compute_artifact_checksum
+from ml.risk.security import compute_artifact_checksum, scan_dataframe_for_pii
 
 ARTIFACT_DIR = Path("artifacts")
 
@@ -278,12 +284,12 @@ if page == "⌂ Command Center":
         title="Model F1-Score (14-Day Production Trend)",
         markers=True,
     )
-    fig_timeline.update_traces(line_color="#58a6ff", line_width=3, marker=dict(size=8, color="#79c0ff"))
+    fig_timeline.update_traces(line_color="#58a6ff", line_width=3, marker={"size": 8, "color": "#79c0ff"})
     fig_timeline.update_layout(
         template="plotly_dark",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=20, r=20, t=40, b=20),
+        margin={"l": 20, "r": 20, "t": 40, "b": 20},
         yaxis_range=[0.0, 1.0],
         xaxis_title="Date",
         yaxis_title="F1 Score",
@@ -335,7 +341,7 @@ elif page == "◈ Model Lab":
         template="plotly_dark",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=20, r=20, t=40, b=20),
+        margin={"l": 20, "r": 20, "t": 40, "b": 20},
         xaxis_title="Model Algorithm",
         yaxis_title="Score",
         height=380,
@@ -401,7 +407,7 @@ elif page == "◉ Prediction Studio":
                 template="plotly_dark",
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
-                margin=dict(l=20, r=20, t=40, b=20),
+                margin={"l": 20, "r": 20, "t": 40, "b": 20},
                 xaxis_title="Contribution Value",
                 yaxis_title="",
                 height=320,
@@ -459,7 +465,7 @@ elif page == "◒ Risk Center":
         template="plotly_dark",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=20, r=20, t=40, b=20),
+        margin={"l": 20, "r": 20, "t": 40, "b": 20},
         xaxis_title="Risk Points",
         yaxis_title="",
         height=320,
@@ -498,7 +504,7 @@ elif page == "✦ Explainability":
         template="plotly_dark",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=20, r=20, t=40, b=20),
+        margin={"l": 20, "r": 20, "t": 40, "b": 20},
         xaxis_title="Mean |SHAP Value| (Impact on Model)",
         yaxis_title="",
         height=520,

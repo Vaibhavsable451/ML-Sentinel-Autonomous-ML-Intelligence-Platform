@@ -1,12 +1,19 @@
 """Evaluation: classification metrics + calibration quality."""
 from __future__ import annotations
-import numpy as np
+
 from dataclasses import dataclass
-from sklearn.metrics import (
-    accuracy_score, f1_score, precision_score, recall_score, roc_auc_score,
-    confusion_matrix, brier_score_loss,
-)
+
+import numpy as np
 from sklearn.calibration import calibration_curve
+from sklearn.metrics import (
+    accuracy_score,
+    brier_score_loss,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 
 
 @dataclass
@@ -41,10 +48,12 @@ def evaluate(model, X, y, n_calibration_bins: int = 10) -> EvalReport:
 
 
 if __name__ == "__main__":
-    import sys, pandas as pd
+    import sys
+
+    import pandas as pd
     sys.path.insert(0, ".")
-    from ml.preprocessing.pipeline import run_pipeline
     from ml.models.benchmark import run_benchmark
+    from ml.preprocessing.pipeline import run_pipeline
 
     df = pd.read_csv("data/train_raw.csv")
     result = run_pipeline(df, target="churned")

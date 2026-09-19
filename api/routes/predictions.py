@@ -1,12 +1,13 @@
 from __future__ import annotations
+
 import numpy as np
 import pandas as pd
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
-from api.schemas import CustomerFeatures, PredictionResponse, ExplainResponse
-from ml.risk.security import validate_input_schema, SchemaValidationError
+from api.schemas import CustomerFeatures, ExplainResponse, PredictionResponse
 from ml.explainability.explain import explain_instance, find_counterfactual
 from ml.features.engineering import add_engineered_features
+from ml.risk.security import SchemaValidationError, validate_input_schema
 
 router = APIRouter()
 

@@ -24,7 +24,7 @@ def parse_args():
 
 def run_cmd(cmd):
     print(f"Executing: {cmd}")
-    res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    res = subprocess.run(cmd, shell=True, capture_output=True, text=True, check=False)
     if res.returncode != 0:
         print(f"Error: {res.stderr}")
         sys.exit(res.returncode)

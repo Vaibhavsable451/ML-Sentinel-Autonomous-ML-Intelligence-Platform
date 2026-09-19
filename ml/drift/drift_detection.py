@@ -4,10 +4,12 @@ Compares a reference distribution (training data / historical predictions)
 against a current one (production traffic / live predictions).
 """
 from __future__ import annotations
+
+from dataclasses import dataclass, field
+
 import numpy as np
 import pandas as pd
-from dataclasses import dataclass, field
-from scipy.stats import ks_2samp, wasserstein_distance, entropy
+from scipy.stats import entropy, ks_2samp, wasserstein_distance
 
 
 def population_stability_index(expected: np.ndarray, actual: np.ndarray, bins: int = 10) -> float:

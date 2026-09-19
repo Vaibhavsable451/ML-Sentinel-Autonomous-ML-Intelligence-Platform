@@ -1,5 +1,6 @@
 """Explainability: global feature importance, per-instance SHAP, and counterfactuals."""
 from __future__ import annotations
+
 import numpy as np
 import pandas as pd
 import shap
@@ -16,7 +17,7 @@ def global_shap_importance(model, X_background: np.ndarray, feature_names: list[
         if vals.ndim == 3:  # multi-class output -> take positive class
             vals = vals[:, :, -1]
         importance = vals.mean(axis=0)
-    except Exception:
+    except Exception:  # noqa: BLE001
         from sklearn.inspection import permutation_importance
         y_dummy = model.predict(sample)
         result = permutation_importance(model, sample, y_dummy, n_repeats=5, random_state=42)
@@ -32,7 +33,7 @@ def explain_instance(model, x_row: np.ndarray, X_background: np.ndarray, feature
         vals = sv.values[0]
         if vals.ndim == 2:
             vals = vals[:, -1]
-    except Exception:
+    except Exception:  # noqa: BLE001
         base_prob = model.predict_proba(x_row.reshape(1, -1))[0, 1]
         vals = np.zeros(len(feature_names))
         means = X_background.mean(axis=0)

@@ -4,19 +4,19 @@ Run with:  PYTHONPATH=. uvicorn api.main:app --reload --port 8000
 Requires artifacts/ to exist (run scripts/train_and_register.py first).
 """
 import sys
+
 sys.path.insert(0, ".")
 import json
 import time
-from pathlib import Path
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 import joblib
-import pandas as pd
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import predictions, governance
 from api.auth.security import RateLimiter
+from api.routes import governance, predictions
 
 ARTIFACT_DIR = Path("artifacts")
 STATE = {}

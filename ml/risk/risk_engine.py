@@ -4,9 +4,9 @@ Higher score = higher risk (0 = perfectly healthy, 100 = critical).
 Each sub-score is 0-100 risk as well, then weighted-averaged.
 """
 from __future__ import annotations
-from dataclasses import dataclass, field
-import time
 
+import time
+from dataclasses import dataclass, field
 
 DEFAULT_WEIGHTS = {
     "data_quality": 0.18,

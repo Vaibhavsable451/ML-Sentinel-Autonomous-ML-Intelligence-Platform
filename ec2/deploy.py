@@ -8,7 +8,7 @@ Usage (from your local machine or CI, with AWS credentials configured):
         --instance-type m7i-flex.large
 """
 import argparse
-import time
+
 import boto3
 
 
@@ -90,11 +90,12 @@ def create_security_group(ec2_resource, ec2_client, sg_name):
         if "already exists" in str(e):
             sgs = ec2_client.describe_security_groups(GroupNames=[sg_name])
             return sgs["SecurityGroups"][0]["GroupId"]
-        raise e
+        raise
 
 
 def main():
     args = parse_args()
+    args.key_name = args.key_name.removesuffix(".pem")
     session = boto3.Session(region_name=args.region)
     ec2_client = session.client("ec2")
     ec2_resource = session.resource("ec2")

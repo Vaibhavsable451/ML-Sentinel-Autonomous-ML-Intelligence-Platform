@@ -4,9 +4,11 @@ This is deliberately dependency-light (no external auth server) so the demo
 runs standalone. Swap `SECRET_KEY` and add a real user store for production.
 """
 from __future__ import annotations
+
 import time
-import jwt
 from collections import defaultdict, deque
+
+import jwt
 from fastapi import Header, HTTPException
 
 SECRET_KEY = "change-me-in-production"  # pragma: allowlist secret

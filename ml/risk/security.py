@@ -3,10 +3,11 @@
 Lives under ml/risk because its output feeds the risk engine's security sub-score.
 """
 from __future__ import annotations
+
 import hashlib
+import json
 import re
 import subprocess
-import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -110,7 +111,7 @@ def scan_dependencies(requirements_path: str = "requirements.txt") -> Dependency
     try:
         result = subprocess.run(
             ["pip-audit", "-r", requirements_path, "-f", "json"],
-            capture_output=True, text=True, timeout=60,
+            capture_output=True, text=True, timeout=60, check=False,
         )
         data = json.loads(result.stdout or "[]")
         vulnerable = [d["name"] for d in data.get("dependencies", []) if d.get("vulns")]

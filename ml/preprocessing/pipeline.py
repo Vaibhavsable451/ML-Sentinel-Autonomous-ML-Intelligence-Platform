@@ -1,15 +1,17 @@
 """Preprocessing pipeline that turns raw, messy data into model-ready arrays."""
 from __future__ import annotations
+
+from dataclasses import dataclass
+
 import numpy as np
 import pandas as pd
-from dataclasses import dataclass
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from ml.preprocessing.data_quality import profile, DataQualityReport, _is_categorical
+from ml.preprocessing.data_quality import DataQualityReport, _is_categorical, profile
 
 
 @dataclass

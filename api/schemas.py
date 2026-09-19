@@ -1,5 +1,7 @@
+
+from typing import ClassVar
+
 from pydantic import BaseModel, Field
-from typing import Optional
 
 
 class CustomerFeatures(BaseModel):
@@ -16,7 +18,7 @@ class CustomerFeatures(BaseModel):
     region: str
 
     class Config:
-        json_schema_extra = {
+        json_schema_extra: ClassVar[dict] = {
             "example": {
                 "age": 34, "tenure_months": 8, "monthly_charges": 95.5,
                 "annual_income": 48000, "outstanding_debt": 22000, "credit_score": 640,
@@ -41,4 +43,4 @@ class ExplanationItem(BaseModel):
 class ExplainResponse(BaseModel):
     prediction: PredictionResponse
     top_factors: list[ExplanationItem]
-    counterfactual: Optional[dict] = None
+    counterfactual: dict | None = None

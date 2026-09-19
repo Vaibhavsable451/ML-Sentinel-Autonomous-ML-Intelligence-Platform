@@ -3,22 +3,29 @@ that the FastAPI service and Streamlit dashboard read from.
 
     PYTHONPATH=. python3 scripts/train_and_register.py
 """
-import sys, json
+import json
+import sys
+
 sys.path.insert(0, ".")
-import pandas as pd
-import joblib
+from dataclasses import asdict
 from pathlib import Path
 
-from ml.preprocessing.pipeline import run_pipeline
+import joblib
+import pandas as pd
+
+from ml.drift.drift_detection import full_drift_report
+from ml.evaluation.metrics import evaluate
 from ml.features.engineering import add_engineered_features
 from ml.models.benchmark import run_benchmark
-from ml.models.registry import ModelCardMetrics, save_to_local_registry, evaluate_promotion, promote
-from ml.evaluation.metrics import evaluate
+from ml.models.registry import (
+    ModelCardMetrics,
+    evaluate_promotion,
+    promote,
+    save_to_local_registry,
+)
+from ml.preprocessing.pipeline import run_pipeline
 from ml.risk.risk_engine import build_risk_report
-from ml.drift.drift_detection import full_drift_report
-from ml.fairness.fairness_metrics import evaluate_fairness
 from ml.risk.security import scan_dataframe_for_pii
-from dataclasses import asdict
 
 ARTIFACT_DIR = Path("artifacts")
 ARTIFACT_DIR.mkdir(exist_ok=True)

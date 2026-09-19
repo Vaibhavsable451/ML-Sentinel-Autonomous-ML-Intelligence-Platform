@@ -4,15 +4,22 @@ Monitor -> detect drift/risk -> decide -> (optionally) train challenger ->
 evaluate -> governance gate -> register -> require human approval before promotion.
 """
 from __future__ import annotations
-from dataclasses import dataclass, asdict
+
+from dataclasses import asdict, dataclass
+
 import pandas as pd
 
-from ml.preprocessing.pipeline import run_pipeline
-from ml.models.benchmark import run_benchmark
-from ml.models.registry import ModelCardMetrics, save_to_local_registry, evaluate_promotion, get_champion
-from ml.evaluation.metrics import evaluate
-from ml.risk.risk_engine import build_risk_report
 from ml.drift.drift_detection import full_drift_report
+from ml.evaluation.metrics import evaluate
+from ml.models.benchmark import run_benchmark
+from ml.models.registry import (
+    ModelCardMetrics,
+    evaluate_promotion,
+    get_champion,
+    save_to_local_registry,
+)
+from ml.preprocessing.pipeline import run_pipeline
+from ml.risk.risk_engine import build_risk_report
 
 
 @dataclass

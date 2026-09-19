@@ -4,13 +4,13 @@ Uses a local MLflow tracking store (file-based) so this runs anywhere;
 point MLFLOW_TRACKING_URI at a remote MLflow tracking server in production.
 """
 from __future__ import annotations
-import os
-import json
-import joblib
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from datetime import datetime, timezone
 
+import json
+from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+
+import joblib
 import mlflow
 import mlflow.sklearn
 
@@ -151,11 +151,13 @@ def evaluate_promotion(
 
 
 if __name__ == "__main__":
-    import sys, pandas as pd
+    import sys
+
+    import pandas as pd
     sys.path.insert(0, ".")
-    from ml.preprocessing.pipeline import run_pipeline
-    from ml.models.benchmark import run_benchmark
     from ml.evaluation.metrics import evaluate
+    from ml.models.benchmark import run_benchmark
+    from ml.preprocessing.pipeline import run_pipeline
     from ml.risk.risk_engine import build_risk_report
 
     df = pd.read_csv("data/train_raw.csv")

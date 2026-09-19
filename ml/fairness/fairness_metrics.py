@@ -1,8 +1,10 @@
 """Fairness metrics across a sensitive/protected group column."""
 from __future__ import annotations
+
+from dataclasses import dataclass
+
 import numpy as np
 import pandas as pd
-from dataclasses import dataclass
 
 
 @dataclass
@@ -50,8 +52,8 @@ def evaluate_fairness(y_true: np.ndarray, y_pred: np.ndarray, groups: pd.Series)
 if __name__ == "__main__":
     import sys
     sys.path.insert(0, ".")
-    from ml.preprocessing.pipeline import run_pipeline
     from ml.models.benchmark import run_benchmark
+    from ml.preprocessing.pipeline import run_pipeline
 
     df = pd.read_csv("data/train_raw.csv")
     result = run_pipeline(df, target="churned")
