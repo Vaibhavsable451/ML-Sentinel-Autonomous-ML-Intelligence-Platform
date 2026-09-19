@@ -11,7 +11,7 @@ on:
         default: "us-east-1"
       instance_type:
         description: "EC2 Instance Type"
-        default: "t3.medium"
+        default: "m7i-flex.large"
 
 jobs:
   deploy-to-ec2:
